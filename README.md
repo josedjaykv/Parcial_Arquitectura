@@ -112,7 +112,9 @@ else {
 inputBuffer[bufferIndex] = keyPressed;
 bufferIndex++;
 }
-``` Si la tecla presionada no es un asterisco (*), se agrega al inputBuffer y se incrementa el índice del buffer para la próxima entrada.
+```
+
+Si la tecla presionada no es un asterisco (*), se agrega al inputBuffer y se incrementa el índice del buffer para la próxima entrada.
 
 `ThisThread::sleep_for(500ms);` Se espera durante 500 milisegundos antes de leer la siguiente columna. Esto evita la lectura múltiple mientras una tecla está presionada.
 
