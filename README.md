@@ -19,6 +19,9 @@ Esta línea declara una variable llamada ledR de tipo PwmOut, que se utiliza par
 
 Lo mismo se hace con ledG y ledB
 
+
+### Definimos la función setRGBColor
+
 ```c++
 void setRGBColor(float red, float green, float blue) {
     ledR = red;
