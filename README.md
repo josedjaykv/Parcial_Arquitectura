@@ -351,7 +351,7 @@ int main() {
 ```
 En la función principal `main`, inicializamos el programa mostrando un mensaje "Ingrese los coeficientes del polinomio de grado 2". Luego, entramos en un bucle infinito que escanea las teclas del teclado matricial. Para cada fila y columna, llamamos a `processKey` para procesar las teclas presionadas y evitar lecturas múltiples mientras una tecla está presionada.
 
-# Manuel de Usuario
+# Manual de Usuario
 
 ## Para la funcion de las notas:
 1. Cuando el programa se esté ejecutando, deberías ver que el programa está esperando una entrada del usuario.
