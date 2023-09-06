@@ -362,7 +362,7 @@ En la función principal `main`, inicializamos el programa mostrando un mensaje 
 6. Por ejemplo, si ingresaste el número 7, el programa debería mostrar "Nota alfanumérica: D" en la salida estándar.
 7. Puedes repetir el proceso para ingresar y convertir otros números tantas veces como desees.
    nota: Si ingresas un número fuera del rango válido (0 a 10), el programa indicará que el valor de nota no es válido.
-# Para la funcion de las raices de un polinomio de grado 2:
+## Para la funcion de las raices de un polinomio de grado 2:
 1. Cuando inicia el programa, verás el mensaje inicial en la pantalla: "Ingrese los coeficientes del polinomio de grado 2."
 2. Presiona el botón *. La pantalla mostrará: "Por favor, ingrese el coeficiente a:"
     Ingresa el valor del coeficiente 'a' como un número entero. Por ejemplo, si 'a' es igual a 2, presiona los botones 2 y luego presiona * para confirmar.
