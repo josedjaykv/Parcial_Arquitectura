@@ -67,6 +67,103 @@ DigitalIn colPins[numCols] = {DigitalIn(D6), DigitalIn(D7), DigitalIn(D8), Digit
 
 ## Función de notas alfanuméricas
 
+
+```c++
+char inputBuffer[50];
+int bufferIndex = 0;
+bool recording = false;
+```
+Estas líneas declaran variables que se utilizarán para capturar la entrada del usuario. 
+
+`inputBuffer` es un arreglo de caracteres que almacena la entrada del usuario.
+
+`bufferIndex` es un índice que se utiliza para rastrear la posición actual en inputBuffer.
+
+`recording` es una bandera que indica si el programa está actualmente capturando la entrada.
+
+```c++
+char convertToGrade(float N) {
+    char nota;
+     if (N >= 0 && N <= 3) {
+        nota = 'A';
+    } else if (N > 3 && N <= 4) {
+        nota = 'B';
+...
+}
+```
+Esta es una función llamada `convertToGrade` que toma un valor numérico `N` como entrada del teclado matricial y devuelve la nota alfanumérica correspondiente. Se utiliza una serie de declaraciones `if` para determinar en qué condicion cae el valor `N` y luego asigna la nota correspondiente a la variable nota que se declaro como un char. Es decir si el usuario ingresa el numero 1 en el teclado matricial esta fumcion devolvera un A y asi sucesivamente se van considerando las siguientes condiciones:
+
+1. Si la nota esta entre 0<=N<=3 devuelve A
+2. Si la nota esta entre 3<N<=4 devuelve B
+3. Si la nota esta entre 4<N<=5 devuelve C
+4. Si la nota esta entre 5<N<=7 devuelve D
+5. Si la nota esta entre 7<N<9 devuelve E
+6. Si la nota esta entre 9<=N<=10 devuelve F
+
+```c++
+void processKey(char key) {
+    if (key == '*' && !recording) {
+        recording = true; // Iniciar la grabación del número
+    } else if (key == '*' && recording) {
+         if (bufferIndex > 0) {
+            inputBuffer[bufferIndex] = '\0';  // Null-terminate the string
+            printf("Numero ingresado: %s\n", inputBuffer);
+            
+            // Convertir la entrada a un número
+            float N = atof(inputBuffer);
+            
+            if (N >= 0 && N <= 10) {
+                char nota = convertToGrade(N);
+                printf("Nota alfanumerica: %c\n", nota);
+            } else {
+                printf("Valor de nota no valido: %s\n", inputBuffer);
+            }
+            
+            bufferIndex = 0;
+        }
+        recording = false; // Detener la grabación después de la conversión
+        
+    } else if (recording) {
+        inputBuffer[bufferIndex++] = key;
+    }
+}
+```
+1. `void processKey(char key) {` : Esta línea define la función `processKey`. Toma un argumento `key`, que representa la tecla presionada del teclado matricial.
+2. `if (key == '*' && !recording) {` : Comienza una estructura condicional `if`. Se verifica si la tecla presionada es * y si la grabación no está en curso (es decir, `recording` es `false`).
+3. `recording = true;` : Si la condición del primer `if` se cumple, esto significa que se ha presionado * por primera vez para iniciar la grabación del número. Se establece recording en `true` para indicar que ahora estamos grabando una entrada numérica.
+4. `} else if (key == '*' && recording) {` : Dentro de la estructura condicional `if`, se verifica si la tecla presionada es * nuevamente y si la grabación ya está en curso. Esto ocurre cuando el usuario presiona * por segunda vez para finalizar la grabación y convertir el número en una nota alfanumérica.
+5. `if (bufferIndex > 0) {` : Se verifica si `bufferIndex` es mayor que 0. Esto garantiza que haya algo en `inputBuffer` para convertir antes de continuar. Si `bufferIndex` es 0, significa que no se ha ingresado ningún número y no hay nada que convertir.
+6. `inputBuffer[bufferIndex] = '\0';` : Se coloca un carácter nulo `('\0')` al final del contenido en `inputBuffer`. Esto es importante porque `inputBuffer` es un arreglo de caracteres y debe estar null-terminado para que la funcion `atof` funcione correctamente.
+7. `printf("Número ingresado: %s\n", inputBuffer);` : Imprime el número ingresado por el usuario en termite. Esto es útil para verificar que se ha capturado correctamente el número.
+8. `float N = atof(inputBuffer);` : Utiliza la función `atof` para convertir la cadena en `inputBuffer` en un número decimal de punto flotante (float). `atof` toma la cadena y la interpreta como un número.
+9. `if (N >= 0 && N <= 10) {` : Verifica si el número está dentro del rango válido, es decir, entre 0 y 10. Si no está en ese rango, se considera un valor de nota no válido.
+10. `char nota = convertToGrade(N);` : Llama a la función `convertToGrade` para convertir el número `N` en una nota alfanumérica y almacena el resultado en la variable `nota`.
+11. `printf("Nota alfanumérica: %c\n", nota);` : Imprime la nota alfanumérica calculada en termite.
+12. `bufferIndex = 0;` : Reinicia `bufferIndex` a 0 para estar listo para capturar un nuevo número que ingrese el usuario.
+13. `recording = false;` : Finalmente, se establece `recording` en `false` para indicar que la grabación ha terminado.
+14. `} else if (recording) {` : Esta parte se ejecuta cuando no se presiona *, pero la grabación está en curso.
+15. `inputBuffer[bufferIndex++] = key;` : Aquí, la tecla actual (`key`) se agrega al búfer de entrada `inputBuffer`. `bufferIndex` se utiliza como un índice para rastrear la posición actual en el búfer, y después de agregar la tecla, se incrementa para prepararse para la próxima tecla. Esto permite la captura de múltiples dígitos y caracteres para formar un número.
+
+```c++
+int main() {
+    while (true) {
+        for (int i = 0; i < numRows; i++) {
+            rowPins[i] = 0;
+
+            for (int j = 0; j < numCols; j++) {
+                if (!colPins[j]) {
+                    processKey(keyMap[i][j]);
+                    ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
+                }
+            }
+
+            rowPins[i] = 1;
+        }
+    }
+}
+```
+En la función `main`, se ejecuta un bucle infinito. En este bucle, se recorren todas las filas del teclado matricial y se comprueban las columnas para detectar cuándo se presiona una tecla. Cuando se detecta una tecla presionada, se llama a la función `processKey` para manejarla. La pausa de 500 ms evita múltiples lecturas cuando una tecla se mantiene presionada. Luego, se cambian las filas para repetir el proceso en la siguiente fila del teclado matricial.
+
 ## Generar colores en un LED RGB
 
 Para generas estos colores usamos la función `void showColors()`
