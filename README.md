@@ -9,15 +9,12 @@ You can build the project with all supported [Mbed OS build tools](https://os.mb
 ## Algunas funciones y declaraciones
 
 ### Declaramos las variables ledR, ledG y ledB
-´´c++
+``c++
 PwmOut ledR(LED1);
 PwmOut ledG(LED2);
 PwmOut ledB(LED3);
-´´
-´´c++
-PwmOut ledR(LED1);
-´´
-Esta línea declara una variable llamada ledR de tipo PwmOut, que se utiliza para controlar la intensidad luminosa (brillo) de un LED. Está configurada para controlar el LED físico conectado al pin LED1 en una placa de desarrollo. La clase PwmOut se utiliza comúnmente para controlar LEDs y otros dispositivos que requieren un control preciso de la intensidad luminosa mediante modulación por anchura de pulso (PWM).
+``
+`PwmOut ledR(LED1);`Esta línea declara una variable llamada ledR de tipo PwmOut, que se utiliza para controlar la intensidad luminosa (brillo) de un LED. Está configurada para controlar el LED físico conectado al pin LED1 en una placa de desarrollo. La clase PwmOut se utiliza comúnmente para controlar LEDs y otros dispositivos que requieren un control preciso de la intensidad luminosa mediante modulación por anchura de pulso (PWM).
 Lo mismo se hace con ledG y ledB
 
 ### Mbed CLI 1
