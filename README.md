@@ -77,4 +77,62 @@ Esta función está diseñada para permitir al usuario seleccionar colores ingre
 
 `int bufferIndex = 0;` Inicializamos una variable llamada `bufferIndex` con un valor de 0. Esta variable se utiliza para realizar un seguimiento de la posición actual en el inputBuffer, es decir, la posición donde se debe almacenar el próximo carácter ingresado.
 
-`unsigned int numerosDecimales[3];` Declaramos un arreglo de enteros sin signo llamado numerosDecimales con una longitud de 3 elementos. Este arreglo se utiliza para almacenar los 3 valores numéricos que representan la intesidad de los LEDs RED, GREEN, BLUE ingresados por el usuario desde el teclado de membrana. Por ejemplo si el usuario quiere visualizar el color rojo debe agregar estos valores [255, 0, 0]
+`unsigned int numerosDecimales[3];` Declaramos un arreglo de enteros sin signo llamado numerosDecimales con una longitud de 3 elementos. Este arreglo se utiliza para almacenar los 3 valores numéricos que representan la intesidad de los LEDs RED, GREEN, BLUE ingresados por el usuario desde el teclado de membrana. Por ejemplo si el usuario quiere visualizar el color rojo debe agregar estos valores [255, 0, 0] que se guardarán en el arreglo `numeroDecimales`.
+
+`int numeroActual = 0;` Inicializamos una variable llamada numeroActual con un valor de 0. Esta variable se utiliza para realizar un seguimiento de cuántos valores numéricos se han ingresado hasta el momento. La función espera tres valores numéricos en total.
+
+`while (numeroActual < 3) {` Inicializamos un bucle while que se ejecutará hasta que se ingresen los tres valores numéricos que necesitamos para formar el color.
+
+`for (int i = 0; i < numRows; i++) {` Hacemos un bucle for que recorre las filas de nuestro teclado de membrana.
+
+`rowPins[i] = 0;` Establecemos en bajo (0) el pin correspondiente a la fila actual en el teclado de membrana. Esto asegura que solo se lean las teclas de una fila a la vez.
+
+`for (int j = 0; j < numCols; j++) {` Hacemos otro bucle for que recorre las columnas del teclado de membrana.
+
+`if (!colPins[j]) {` Verificamos si el pin de la columna actual en el teclado de membrana está en bajo (es decir, si una tecla se ha presionado en esa posición).
+
+`char keyPressed = keyMap[i][j];` Obtenemos el carácter asociado a la tecla presionada en la posición actual y lo guardamos en la variable `keyPressed`.
+
+`if (keyPressed == '*') {` Verificamos si la tecla presionada es un asterisco (*), que en nuestro caso se utiliza como una especie de "enter".
+
+`inputBuffer[bufferIndex] = '\0';` Se agrega un carácter nulo al final del inputBuffer para convertirlo en una cadena de caracteres válida.
+
+`sscanf(inputBuffer, "%u", &numerosDecimales[numeroActual]);` Utilizamos la función sscanf para convertir la cadena almacenada en inputBuffer en un valor numérico sin signo, que se almacena en el arreglo `numerosDecimales` en la posición `numeroActual`. 
+
+`printf("Número %d ingresado: %u\n", numeroActual + 1, numerosDecimales[numeroActual]);` Imprimimos el número recien ingresado indicando que número hemos ingresado, por ejemplo: "Número 1 ingresado: 255".
+
+`memset(inputBuffer, 0, sizeof(inputBuffer));` Se borra el contenido del `inputBuffer` para prepararlo para el próximo valor numérico.
+
+`bufferIndex = 0;` Se reinicia el índice del buffer a 0 para empezar a almacenar el próximo carácter desde el principio.
+
+`numeroActual++;` Se incrementa el contador de valores numéricos ingresados.
+
+```c++ 
+else {
+inputBuffer[bufferIndex] = keyPressed;
+bufferIndex++;
+}
+``` Si la tecla presionada no es un asterisco (*), se agrega al inputBuffer y se incrementa el índice del buffer para la próxima entrada.
+
+`ThisThread::sleep_for(500ms);` Se espera durante 500 milisegundos antes de leer la siguiente columna. Esto evita la lectura múltiple mientras una tecla está presionada.
+
+`rowPins[i] = 1;` Se vuelve a establecer en alto (1) el pin de la fila actual en el teclado de membrana para prepararse para la siguiente iteración del bucle for que recorre las filas.
+
+**Fin del bucle for**
+
+**Fin del bucle while**
+
+```c++
+float red = 1 - (float)(numerosDecimales[0] / 255.0f);
+float green = 1 - (float)(numerosDecimales[1] / 255.0f);
+float blue = 1 - (float)(numerosDecimales[2] / 255.0f);
+
+setRGBColor(red, green, blue);
+```
+
+Después de salir del bucle while, se calculan los valores de rojo (red), verde (green) y azul (blue) en función de los valores numéricos ingresados. Estos valores se convierten en flotantes entre 0 y 1, y se utilizan para establecer el color en los LEDs RGB mediante la función `setRGBColor`.
+
+
+
+
+
