@@ -351,9 +351,9 @@ int main() {
 ```
 En la función principal `main`, inicializamos el programa mostrando un mensaje "Ingrese los coeficientes del polinomio de grado 2". Luego, entramos en un bucle infinito que escanea las teclas del teclado matricial. Para cada fila y columna, llamamos a `processKey` para procesar las teclas presionadas y evitar lecturas múltiples mientras una tecla está presionada.
 
-## Manuel de Usuario
+# Manuel de Usuario
 
-# Para la funcion de las notas:
+## Para la funcion de las notas:
 1. Cuando el programa se esté ejecutando, deberías ver que el programa está esperando una entrada del usuario.
 2. Presiona la tecla * en el teclado matricial. Esto iniciará la grabación de un número.
 3. Luego de presionar *, puedes ingresar un número de 0 a 10 utilizando las teclas numéricas en el teclado matricial. Por ejemplo, si deseas ingresar el número 7, presiona 7, y así sucesivamente.
@@ -372,6 +372,7 @@ En la función principal `main`, inicializamos el programa mostrando un mensaje 
     Ingresa el valor del coeficiente 'c' de la misma manera que ingresaste 'a' y 'b'. Por ejemplo, si 'c' es igual a 1, presiona los botones 1 y luego presiona * para confirmar.
 5. Una vez que ingresaste 'a', 'b' y 'c', el programa mostrará un mensaje en pantalla con los coeficientes que ingresaste. Por ejemplo: "Coeficientes ingresados: a=2, b=3, c=1".
 6. Luego de mostrar los coeficientes ingresados, el programa calculará automáticamente las raíces del polinomio de grado 2 utilizando la fórmula cuadrática.
+
 ## Observaciones
 
 1. En el programa de la notas es mejor utilizar un `switch` para cada caso de la notas en vez de tener muchos `else if`, que al momento se verlos en codigo son menos amigables y en un `switch` se ve mejor la informacion de los casos a tratar
