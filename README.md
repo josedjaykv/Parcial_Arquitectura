@@ -164,7 +164,8 @@ void mostrarNotas(){
 }
 ```
 En la función `mostrarNotas()`, se ejecuta un bucle infinito. En este bucle, se recorren todas las filas del teclado matricial y se comprueban las columnas para detectar cuándo se presiona una tecla. Cuando se detecta una tecla presionada, se llama a la función `processKey` para manejarla. La pausa de 500 ms evita múltiples lecturas cuando una tecla se mantiene presionada. Luego, se cambian las filas para repetir el proceso en la siguiente fila del teclado matricial.
-**Este es el método que se llama en el main.**
+
+**Este es el método que se llama en el main para la Función de Notas Alfanuméricas.**
 
 ## Generar colores en un LED RGB
 
