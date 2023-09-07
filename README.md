@@ -357,9 +357,107 @@ En la función principal `main`, inicializamos el programa mostrando un mensaje 
 printf("Por favor, elija una opción y presione * para confirmar:\n");
 printf("1. Calcular raíces de un polinomio de grado 2\n");
 printf("2. Mostrar colores\n");
+printf("3. Notas\n");
+
+printf("Elija una opción: ");
+
 ```
 
-Primero le preguntamos al usaurio 
+Primero le preguntamos al usaurio que opción desea ejecutar y leemos la tecla del teclado de membrana.
+
+```c++
+ int eleccion = -1;
+
+    // Leer la elección del usuario desde el teclado de membrana
+    while (eleccion < 0 || eleccion > 3) {
+        for (int i = 0; i < numRows; i++) {
+            rowPins[i] = 0;
+
+            for (int j = 0; j < numCols; j++) {
+                if (!colPins[j]) {
+                    char keyPressed = keyMap[i][j];
+
+                    if (keyPressed >= '0' && keyPressed <= '3') {
+                        eleccion = keyPressed - '0';
+                    } else if (keyPressed == '*') {
+                        break;
+                    }
+
+                    ThisThread::sleep_for(500ms);
+                }
+            }
+
+            if (eleccion >= 0 && eleccion <= 3) {
+                break;
+            }
+
+            rowPins[i] = 1;
+        }
+    }
+```
+
+`int eleccion = -1;` Inicializa la variable `eleccion` a -1. Esta variable se utilizará para almacenar la elección del usuario.
+
+`while (eleccion < 0 || eleccion > 3) {` Este bucle se ejecutará continuamente hasta que se ingrese una elección válida (un número entre 0 y 3).
+
+`for (int i = 0; i < numRows; i++) {` Este bucle exterior itera a través de las filas del teclado de membrana.
+
+`for (int i = 0; i < numRows; i++) {` Este bucle exterior itera a través de las filas del teclado de membrana.
+
+`rowPins[i] = 0;` Apaga la fila actual del teclado de membrana.
+
+`for (int j = 0; j < numCols; j++) {` Este bucle interior itera a través de las columnas del teclado de membrana.
+
+`if (!colPins[j]) {` Verifica si una columna está activada (cuando colPins[j] es igual a 0), lo que indica que una tecla en esa posición ha sido presionada.
+
+`char keyPressed = keyMap[i][j];` Obtiene el carácter asociado a la tecla presionada en el teclado de membrana.
+
+`if (keyPressed >= '0' && keyPressed <= '3') {` Comprueba si el carácter presionado es un número entre '0' y '3'.
+
+`eleccion = keyPressed - '0';` Si se presiona un número válido, convierte ese carácter en un valor numérico y lo almacena en la variable eleccion.
+
+`else if (keyPressed == '*') {` Si se presiona la tecla '*', significa que el usuario quiere cancelar la elección y salir del bucle.
+
+`break;` Sale del bucle interior tan pronto como se haya procesado una tecla.
+
+`ThisThread::sleep_for(500ms);` Espera durante un corto período para evitar lecturas múltiples mientras la tecla está presionada.
+
+`if (eleccion >= 0 && eleccion <= 3) {` Comprueba si se ha ingresado una elección válida (un número entre 0 y 3).
+
+`break;` Si se ingresó una elección válida, sale del bucle exterior.
+
+`rowPins[i] = 1;` Enciende nuevamente la fila del teclado de membrana para la siguiente iteración.
+
+En resumen, este código permite al usuario seleccionar un número entre 0 y 3 en un teclado de membrana. Tan pronto como se ingresa una elección válida o se presiona la tecla '*', el bucle se detiene y la elección se almacena en la variable eleccion.
+
+Luego se ejecutan la opción seleccionada:
+
+```c++
+if (eleccion == 1) {
+        calculateRoots();
+    } else if (eleccion == 2) {
+        showColors();
+    } else if (eleecion == 3) {
+        printf("Ingrese los coeficientes del polinomio de grado 2.\n");
+        while (true) {
+            for (int i = 0; i < numRows; i++) {
+                rowPins[i] = 0;
+
+                for (int j = 0; j < numCols; j++) {
+                    if (!colPins[j]) {
+                        processKey(keyMap[i][j]);
+                        ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
+                    }
+                }
+
+                rowPins[i] = 1;
+            }
+        }
+    }
+```
+
+Nota: **Era recomendable usar un switch en lugar de if**
+
 
 # Manual de Usuario
 
@@ -382,6 +480,18 @@ Primero le preguntamos al usaurio
     Ingresa el valor del coeficiente 'c' de la misma manera que ingresaste 'a' y 'b'. Por ejemplo, si 'c' es igual a 1, presiona los botones 1 y luego presiona * para confirmar.
 5. Una vez que ingresaste 'a', 'b' y 'c', el programa mostrará un mensaje en pantalla con los coeficientes que ingresaste. Por ejemplo: "Coeficientes ingresados: a=2, b=3, c=1".
 6. Luego de mostrar los coeficientes ingresados, el programa calculará automáticamente las raíces del polinomio de grado 2 utilizando la fórmula cuadrática.
+
+## Para la función de Generar colores en un LED RGB
+
+1. Se presiona la tecla "2" para acceder a esta función.
+2. Se preseiona la tecla "*" para confirmar.
+3. Una vez presionala la tecla "*" se introduce el valor que va a corresponder al LED RED.
+4. Se Se preseiona la tecla "*" para confirmar.
+5. Se introduce el valor que va a corresponder al LED GREEN.
+6. Se Se preseiona la tecla "*" para confirmar.
+7. Se introduce el valor que va a corresponder al LED BLUE.
+8. Se Se preseiona la tecla "*" para confirmar.
+9. Listo! ya podrás ver el color en la tarjeta
 
 ## Observaciones
 
