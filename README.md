@@ -380,7 +380,7 @@ printf("Elija una opción: ");
 
 ```
 
-Primero le preguntamos al usaurio que opción desea ejecutar y leemos la tecla del teclado de membrana.
+Primero le preguntamos al usaurio que opción desea ejecutar y guardamos en la variable eleccción el número que representa la elecciónd el usuario, esté valor lo da la función `darEleccion();`.
 
 ```c++
  int eleccion = -1;
