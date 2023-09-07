@@ -146,24 +146,25 @@ void processKey(char key) {
 15. `inputBuffer[bufferIndex++] = key;` : Aquí, la tecla actual (`key`) se agrega al búfer de entrada `inputBuffer`. `bufferIndex` se utiliza como un índice para rastrear la posición actual en el búfer, y después de agregar la tecla, se incrementa para prepararse para la próxima tecla. Esto permite la captura de múltiples dígitos y caracteres para formar un número.
 
 ```c++
-int main() {
+void mostrarNotas(){
     while (true) {
-        for (int i = 0; i < numRows; i++) {
-            rowPins[i] = 0;
+            for (int i = 0; i < numRows; i++) {
+                rowPins[i] = 0;
 
-            for (int j = 0; j < numCols; j++) {
-                if (!colPins[j]) {
-                    processKey(keyMap[i][j]);
-                    ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
+                for (int j = 0; j < numCols; j++) {
+                    if (!colPins[j]) {
+                        processKey(keyMap[i][j]);
+                        ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
+                    }
                 }
-            }
 
-            rowPins[i] = 1;
+                rowPins[i] = 1;
+            }
         }
-    }
 }
 ```
-En la función `main`, se ejecuta un bucle infinito. En este bucle, se recorren todas las filas del teclado matricial y se comprueban las columnas para detectar cuándo se presiona una tecla. Cuando se detecta una tecla presionada, se llama a la función `processKey` para manejarla. La pausa de 500 ms evita múltiples lecturas cuando una tecla se mantiene presionada. Luego, se cambian las filas para repetir el proceso en la siguiente fila del teclado matricial.
+En la función `mostrarNotas()`, se ejecuta un bucle infinito. En este bucle, se recorren todas las filas del teclado matricial y se comprueban las columnas para detectar cuándo se presiona una tecla. Cuando se detecta una tecla presionada, se llama a la función `processKey` para manejarla. La pausa de 500 ms evita múltiples lecturas cuando una tecla se mantiene presionada. Luego, se cambian las filas para repetir el proceso en la siguiente fila del teclado matricial.
+**Este es el método que se llama en el main.**
 
 ## Generar colores en un LED RGB
 
