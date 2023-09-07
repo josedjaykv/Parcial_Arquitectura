@@ -41,14 +41,14 @@ void calculateRoots(int a, int b, int c) {
         // Dos raíces enteras
         int root1 = (-b + sqrt(discriminant)) / (2 * a);
         int root2 = (-b - sqrt(discriminant)) / (2 * a);
-        printf("Raíces enteras: %d y %d\n", root1, root2);
+        printf("Raices enteras: %d y %d\n", root1, root2);
     } else if (discriminant == 0) {
         // Una raíz real
         int root = -b / (2 * a);
-        printf("Raíz entera única: %d\n", root);
+        printf("Raiz entera unica: %d\n", root);
     } else {
         // Raíces complejas (no aplicable en este caso)
-        printf("El polinomio no tiene raíces enteras.\n");
+        printf("El polinomio no tiene raices enteras.\n");
     }
 }
 
@@ -66,7 +66,7 @@ void processKeyRaiz(char key) {
                 }
             } else {
                 if (sscanf(inputBufferRaiz, "%d", &coefficientValue) != 1) {
-                    printf("Entrada inválida. Por favor, ingrese un número válido.\n");
+                    printf("Entrada invalida. Por favor, ingrese un numero valido.\n");
                     bufferIndexRaiz = 0;
                     return;
                 }
@@ -149,16 +149,16 @@ void processKey(char key) {
     } else if (key == '*' && recording) {
         if (bufferIndex > 0) {
             inputBuffer[bufferIndex] = '\0';  // Null-terminate the string
-            printf("Número ingresado: %s\n", inputBuffer);
+            printf("Numero ingresado: %s\n", inputBuffer);
             
             // Convertir la entrada a un número
             float N = atof(inputBuffer);
             
             if (N >= 0 && N <= 10) {
                 char nota = convertToGrade(N);
-                printf("Nota alfanumérica: %c\n", nota);
+                printf("Nota alfanumerica: %c\n", nota);
             } else {
-                printf("Valor de nota no válido: %s\n", inputBuffer);
+                printf("Valor de nota no valido: %s\n", inputBuffer);
             }
             
             bufferIndex = 0;
@@ -205,7 +205,7 @@ void showColors() {
                         inputBuffer[bufferIndex] = '\0';
 
                         sscanf(inputBuffer, "%u", &numerosDecimales[numeroActual]);
-                        printf("Número %d ingresado: %u\n", numeroActual + 1, numerosDecimales[numeroActual]);
+                        printf("Numero %d ingresado: %u\n", numeroActual + 1, numerosDecimales[numeroActual]);
 
                         memset(inputBuffer, 0, sizeof(inputBuffer));
                         bufferIndex = 0;
@@ -274,13 +274,13 @@ int darEleccion(){
 
 
 int main() {
-    printf("Por favor, elija una opción y presione * para confirmar:\n");
-    printf("1. Calcular raíces de un polinomio de grado 2\n");
+    printf("Por favor, elija una opcion y presione * para confirmar:\n");
+    printf("1. Calcular raices de un polinomio de grado 2\n");
     printf("2. Mostrar colores\n");
     printf("3. Mostrar notas\n");
 
 
-    printf("Elija una opción: ");
+    printf("Elija una opcion: ");
 
     int eleccion = darEleccion();
 
