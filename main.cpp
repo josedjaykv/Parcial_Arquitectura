@@ -284,12 +284,19 @@ int main() {
 
     int eleccion = darEleccion();
 
-    if (eleccion == 1) {
+    switch (eleccion) {
+    case 1:
         llamarCalculateRoots();
-    } else if (eleccion == 2) {
+        break;
+    case 2:
         showColors();
-    } else if (eleccion == 3) {
+        break;
+    case 3:
         mostrarNotas();
+        break;
+    default:
+        printf("Programa terminado.\n");
+        break;
     }
     
     printf("Programa terminado.\n");
