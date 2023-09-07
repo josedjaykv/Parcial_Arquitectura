@@ -1,4 +1,3 @@
-# Ir al repositorio : https://github.com/josedjaykv/Parcial_Arquitectura_de_Hardware.git
 
 # Parcial de Arquitectura de HardWare
 Por Diego Collazos y José David Jayk Vanegas
