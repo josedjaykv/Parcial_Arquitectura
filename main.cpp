@@ -27,71 +27,100 @@ DigitalOut rowPins[numRows] = {DigitalOut(D2), DigitalOut(D3), DigitalOut(D4), D
 DigitalIn colPins[numCols] = {DigitalIn(D6), DigitalIn(D7), DigitalIn(D8), DigitalIn(D9)};
 
 // Función para calcular las raíces de un polinomio de grado 2
-void calculateRoots() {
-    char inputBuffer[32];
-    int bufferIndex = 0;
-    unsigned int coeficientes[3];
-    int numeroActual = 0;
 
-    while (numeroActual < 3) {
+char inputBufferRaiz[50];
+int bufferIndexRaiz = 0;
+bool recordingRaiz = false;
+
+int coefficients[3]; // Array para almacenar los coeficientes a, b y c
+int coefficientIndex = 0; // Índice para el coeficiente actual
+
+void calculateRoots(int a, int b, int c) {
+    int discriminant = b * b - 4 * a * c;
+    if (discriminant > 0) {
+        // Dos raíces enteras
+        int root1 = (-b + sqrt(discriminant)) / (2 * a);
+        int root2 = (-b - sqrt(discriminant)) / (2 * a);
+        printf("Raíces enteras: %d y %d\n", root1, root2);
+    } else if (discriminant == 0) {
+        // Una raíz real
+        int root = -b / (2 * a);
+        printf("Raíz entera única: %d\n", root);
+    } else {
+        // Raíces complejas (no aplicable en este caso)
+        printf("El polinomio no tiene raíces enteras.\n");
+    }
+}
+
+void processKeyRaiz(char key) {
+    if (recordingRaiz) {
+        if (key == '*') {
+            inputBufferRaiz[bufferIndexRaiz] = '\0';  // Null-terminate the string
+            printf("Coeficiente %c: %s\n", 'a' + coefficientIndex, inputBufferRaiz);
+
+            // Interpretar '#' como signo negativo al inicio
+            int coefficientValue;
+            if (inputBufferRaiz[0] == '#') {
+                if (sscanf(inputBufferRaiz + 1, "%d", &coefficientValue) == 1) {
+                    coefficientValue = -coefficientValue;
+                }
+            } else {
+                if (sscanf(inputBufferRaiz, "%d", &coefficientValue) != 1) {
+                    printf("Entrada inválida. Por favor, ingrese un número válido.\n");
+                    bufferIndexRaiz = 0;
+                    return;
+                }
+            }
+
+            coefficients[coefficientIndex] = coefficientValue;
+            coefficientIndex++;
+            if (coefficientIndex < 3) {
+                printf("Por favor, ingrese el coeficiente %c: ", 'a' + coefficientIndex);
+                bufferIndexRaiz = 0;
+            } else {
+                printf("Coeficientes ingresados: a=%d, b=%d, c=%d\n", coefficients[0], coefficients[1], coefficients[2]);
+                // Calcula las raíces
+                calculateRoots(coefficients[0], coefficients[1], coefficients[2]);
+                coefficientIndex = 0;
+                recordingRaiz = false;
+            }
+        } else {
+            inputBufferRaiz[bufferIndexRaiz++] = key;
+        }
+    } else {
+        if (key == '*') {
+            recordingRaiz = true;
+            printf("Por favor, ingrese el coeficiente %c: ", 'a' + coefficientIndex);
+            bufferIndexRaiz = 0;
+        }
+    }
+}
+
+
+void llamarCalculateRoots(){
+    printf("Ingrese los coeficientes del polinomio de grado 2.\n");
+    while (true) {
         for (int i = 0; i < numRows; i++) {
             rowPins[i] = 0;
 
             for (int j = 0; j < numCols; j++) {
                 if (!colPins[j]) {
-                    char keyPressed = keyMap[i][j];
-
-                    if (keyPressed == '*') {
-                        inputBuffer[bufferIndex] = '\0';
-
-                        sscanf(inputBuffer, "%u", &coeficientes[numeroActual]);
-                        printf("Coeficiente %d ingresado: %u\n", numeroActual + 1, coeficientes[numeroActual]);
-
-                        memset(inputBuffer, 0, sizeof(inputBuffer));
-                        bufferIndex = 0;
-
-                        numeroActual++;
-
-                        if (numeroActual >= 3) {
-                            break;
-                        }
-                    } else {
-                        inputBuffer[bufferIndex] = keyPressed;
-                        bufferIndex++;
-                    }
-
-                    ThisThread::sleep_for(500ms);
+                    processKeyRaiz(keyMap[i][j]);
+                    ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
                 }
-            }
-
-            if (numeroActual >= 3) {
-                break;
             }
 
             rowPins[i] = 1;
         }
     }
-
-    double discriminante = coeficientes[1] * coeficientes[1] - 4 * coeficientes[0] * coeficientes[2];
-
-    if (discriminante > 0) {
-        double x1 = (-coeficientes[1] + std::sqrt(discriminante)) / (2 * coeficientes[0]);
-        double x2 = (-coeficientes[1] - std::sqrt(discriminante)) / (2 * coeficientes[0]);
-        printf("Las raíces son: x1 = %lf y x2 = %lf\n", x1, x2);
-    } else if (discriminante == 0) {
-        double x = -coeficientes[1] / (2 * coeficientes[0]);
-        printf("La raíz doble es: x = %lf\n", x);
-    } else {
-        double realPart = -coeficientes[1] / (2 * coeficientes[0]);
-        double imaginaryPart = std::sqrt(-discriminante) / (2 * coeficientes[0]);
-        printf("Las raíces son imaginarias: x1 = %lf + %lfi y x2 = %lf - %lfi\n", realPart, imaginaryPart, realPart, imaginaryPart);
-    }
 }
+
 
 char inputBuffer[50];
 int bufferIndex = 0;
 bool recording = false;
 
+// Notas ****************************************************************
 char convertToGrade(float N) {
     char nota;
     
@@ -138,6 +167,23 @@ void processKey(char key) {
     } else if (recording) {
         inputBuffer[bufferIndex++] = key;
     }
+}
+
+void mostrarNotas(){
+    while (true) {
+            for (int i = 0; i < numRows; i++) {
+                rowPins[i] = 0;
+
+                for (int j = 0; j < numCols; j++) {
+                    if (!colPins[j]) {
+                        processKey(keyMap[i][j]);
+                        ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
+                    }
+                }
+
+                rowPins[i] = 1;
+            }
+        }
 }
 
 // Función para mostrar colores
@@ -193,13 +239,8 @@ void showColors() {
     setRGBColor(red, green, blue);
 }
 
-int main() {
-    printf("Por favor, elija una opción y presione * para confirmar:\n");
-    printf("1. Calcular raíces de un polinomio de grado 2\n");
-    printf("2. Mostrar colores\n");
 
-    printf("Elija una opción: ");
-
+int darEleccion(){
     int eleccion = -1;
 
     // Leer la elección del usuario desde el teclado de membrana
@@ -226,28 +267,29 @@ int main() {
             }
 
             rowPins[i] = 1;
-        }
+        }        
     }
+    return eleccion;
+}
+
+
+int main() {
+    printf("Por favor, elija una opción y presione * para confirmar:\n");
+    printf("1. Calcular raíces de un polinomio de grado 2\n");
+    printf("2. Mostrar colores\n");
+    printf("3. Mostrar notas\n");
+
+
+    printf("Elija una opción: ");
+
+    int eleccion = darEleccion();
 
     if (eleccion == 1) {
-        calculateRoots();
+        llamarCalculateRoots();
     } else if (eleccion == 2) {
         showColors();
-    } else if (eleecion == 3) {
-        while (true) {
-        for (int i = 0; i < numRows; i++) {
-            rowPins[i] = 0;
-
-            for (int j = 0; j < numCols; j++) {
-                if (!colPins[j]) {
-                    processKey(keyMap[i][j]);
-                    ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
-                }
-            }
-
-            rowPins[i] = 1;
-        }
-    }
+    } else if (eleccion == 3) {
+        mostrarNotas();
     }
 
     printf("Programa terminado.\n");
