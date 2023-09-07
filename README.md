@@ -236,13 +236,10 @@ Después de salir del bucle while, se calculan los valores de rojo (red), verde 
 
 ## Función de raices de un polinomio de grado 2 
 
-(Mirar esta funcionalidad bien ejecutada en el siguiente repositorio: https://github.com/DiegoColBdz/Raices-Parcial2023.git)
-(Nos falto corregirlo en este repositorio)
-
 ```c++
-char inputBuffer[50];
-int bufferIndex = 0;
-bool recording = false;
+char inputBufferRaiz[50];
+int bufferIndexRaiz = 0;
+bool recordingRaiz = false;
 ```
 Aqui declaramos variables para manejar la entrada de coeficientes.
 `inputBuffer` es un arreglo de caracteres que almacenará la entrada del usuario.
@@ -276,7 +273,7 @@ void calculateRoots(int a, int b, int c) {
 Definimos una función `calculateRoots` que toma tres coeficientes enteros `a, b y c` y calcula las raíces del polinomio de grado 2 utilizando la fórmula cuadrática o mejor conocida como formula del estudiante. La función verifica si el discriminante es mayor que 0 (dos raíces reales), igual a 0 (una raíz real) o menor que 0 (raíces complejas), y muestra las raíces en la pantalla.
 
 ```c++
-void processKey(char key) {
+void processKeyRaiz(char key) {
     if (recording) {
         if (key == '*') {
             inputBuffer[bufferIndex] = '\0';  // Null-terminate the string
@@ -348,15 +345,15 @@ void processKey(char key) {
 En sintesis `processKey` maneja la entrada del usuario para que pueda ingresar coeficientes uno por uno, verificar la validez de la entrada y calcular las raíces una vez que todos los coeficientes han sido ingresados correctamente.
 
 ```c++
-int main() {
+void llamarCalculateRoots(){
     printf("Ingrese los coeficientes del polinomio de grado 2.\n");
     while (true) {
         for (int i = 0; i < numRows; i++) {
             rowPins[i] = 0;
-            
+
             for (int j = 0; j < numCols; j++) {
                 if (!colPins[j]) {
-                    processKey(keyMap[i][j]);
+                    processKeyRaiz(keyMap[i][j]);
                     ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
                 }
             }
@@ -364,9 +361,12 @@ int main() {
             rowPins[i] = 1;
         }
     }
-}    
+}
 ```
-En la función principal `main`, inicializamos el programa mostrando un mensaje "Ingrese los coeficientes del polinomio de grado 2". Luego, entramos en un bucle infinito que escanea las teclas del teclado matricial. Para cada fila y columna, llamamos a `processKey` para procesar las teclas presionadas y evitar lecturas múltiples mientras una tecla está presionada.
+En la función `llamarCalculateRoots`, el programa muestra el mensaje "Ingrese los coeficientes del polinomio de grado 2". Luego, entramos en un bucle infinito que escanea las teclas del teclado matricial. Para cada fila y columna, llamamos a `processKey` para procesar las teclas presionadas y evitar lecturas múltiples mientras una tecla está presionada.
+
+**Este es el método que se llama en el main para la Función de raices de un polinomio de grado 2.**
+
 
 ## Main
 
