@@ -331,23 +331,24 @@ void processKey(char key) {
 En sintesis `processKey` maneja la entrada del usuario para que pueda ingresar coeficientes uno por uno, verificar la validez de la entrada y calcular las raíces una vez que todos los coeficientes han sido ingresados correctamente.
 
 ```c++
-int main() {
-    printf("Ingrese los coeficientes del polinomio de grado 2.\n");
-    while (true) {
-        for (int i = 0; i < numRows; i++) {
-            rowPins[i] = 0;
-            
-            for (int j = 0; j < numCols; j++) {
-                if (!colPins[j]) {
-                    processKey(keyMap[i][j]);
-                    ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
-                }
-            }
+} else if (eleecion == 3) {
+        printf("Ingrese los coeficientes del polinomio de grado 2.\n");
+        while (true) {
+            for (int i = 0; i < numRows; i++) {
+                rowPins[i] = 0;
 
-            rowPins[i] = 1;
+                for (int j = 0; j < numCols; j++) {
+                    if (!colPins[j]) {
+                        processKey(keyMap[i][j]);
+                        ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
+                    }
+                }
+
+                rowPins[i] = 1;
+            }
         }
     }
-}
+    
 ```
 En la función principal `main`, inicializamos el programa mostrando un mensaje "Ingrese los coeficientes del polinomio de grado 2". Luego, entramos en un bucle infinito que escanea las teclas del teclado matricial. Para cada fila y columna, llamamos a `processKey` para procesar las teclas presionadas y evitar lecturas múltiples mientras una tecla está presionada.
 
