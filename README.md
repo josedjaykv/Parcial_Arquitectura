@@ -352,6 +352,16 @@ En sintesis `processKey` maneja la entrada del usuario para que pueda ingresar c
 ```
 En la función principal `main`, inicializamos el programa mostrando un mensaje "Ingrese los coeficientes del polinomio de grado 2". Luego, entramos en un bucle infinito que escanea las teclas del teclado matricial. Para cada fila y columna, llamamos a `processKey` para procesar las teclas presionadas y evitar lecturas múltiples mientras una tecla está presionada.
 
+## Main
+
+```c++
+printf("Por favor, elija una opción y presione * para confirmar:\n");
+printf("1. Calcular raíces de un polinomio de grado 2\n");
+printf("2. Mostrar colores\n");
+```
+
+Primero le preguntamos al usaurio 
+
 # Manual de Usuario
 
 ## Para la funcion de las notas:
