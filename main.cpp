@@ -291,7 +291,7 @@ int main() {
     } else if (eleccion == 3) {
         mostrarNotas();
     }
-
+    
     printf("Programa terminado.\n");
     
     return 0;
