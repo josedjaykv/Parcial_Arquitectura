@@ -276,58 +276,72 @@ Definimos una función `calculateRoots` que toma tres coeficientes enteros `a, b
 ```c++
 void processKey(char key) {
     if (recording) {
-        // Verificamos si estamos en modo de grabación
         if (key == '*') {
-            // Si el usuario presiona '*', indica que ha terminado de ingresar el coeficiente actual
             inputBuffer[bufferIndex] = '\0';  // Null-terminate the string
             printf("Coeficiente %c: %s\n", 'a' + coefficientIndex, inputBuffer);
 
-            // Analizamos y almacenamos el coeficiente ingresado en la matriz 'coefficients'
-            if (sscanf(inputBuffer, "%d", &coefficients[coefficientIndex]) == 1) {
-                // La función 'sscanf' analiza el contenido de 'inputBuffer' y extrae un número entero
-                coefficientIndex++;
-                if (coefficientIndex < 3) {
-                    // Si todavía hay coeficientes por ingresar, solicitamos el siguiente
-                    printf("Por favor, ingrese el coeficiente %c: ", 'a' + coefficientIndex);
-                    bufferIndex = 0;  // Reiniciamos el índice del búfer para el próximo coeficiente
-                } else {
-                    // Si se han ingresado todos los coeficientes, mostramos un mensaje con los coeficientes
-                    printf("Coeficientes ingresados: a=%d, b=%d, c=%d\n", coefficients[0], coefficients[1], coefficients[2]);
-
-                    // Calculamos las raíces llamando a la función 'calculateRoots' con los coeficientes
-                    calculateRoots(coefficients[0], coefficients[1], coefficients[2]);
-
-                    coefficientIndex = 0;  // Reiniciamos el índice de coeficiente para futuras entradas
-                    recording = false;    // Salimos del modo de grabación
+            // Interpretar '#' como signo negativo al inicio
+            int coefficientValue;
+            if (inputBuffer[0] == '#') {
+                if (sscanf(inputBuffer + 1, "%d", &coefficientValue) == 1) {
+                    coefficientValue = -coefficientValue;
                 }
             } else {
-                // Si la entrada no es un número válido, mostramos un mensaje de error
-                printf("Entrada inválida. Por favor, ingrese un número válido.\n");
-                bufferIndex = 0;  // Reiniciamos el índice del búfer para ingresar nuevamente el coeficiente
+                if (sscanf(inputBuffer, "%d", &coefficientValue) != 1) {
+                    printf("Entrada inválida. Por favor, ingrese un número válido.\n");
+                    bufferIndex = 0;
+                    return;
+                }
+            }
+
+            coefficients[coefficientIndex] = coefficientValue;
+            coefficientIndex++;
+            if (coefficientIndex < 3) {
+                printf("Por favor, ingrese el coeficiente %c: ", 'a' + coefficientIndex);
+                bufferIndex = 0;
+            } else {
+                printf("Coeficientes ingresados: a=%d, b=%d, c=%d\n", coefficients[0], coefficients[1], coefficients[2]);
+                // Calcula las raíces
+                calculateRoots(coefficients[0], coefficients[1], coefficients[2]);
+                coefficientIndex = 0;
+                recording = false;
             }
         } else {
-            // Si no se presiona '*', significa que estamos ingresando dígitos del coeficiente actual
-            inputBuffer[bufferIndex++] = key;  // Almacenamos el dígito en el búfer
+            inputBuffer[bufferIndex++] = key;
         }
     } else {
-        // Si no estamos en modo de grabación y el usuario presiona '*', iniciamos la grabación
         if (key == '*') {
-            recording = true;  // Entramos en modo de grabación
-            printf("Por favor, ingrese el coeficiente %c: ", 'a' + coefficientIndex);  // Solicitamos el primer coeficiente
-            bufferIndex = 0;  // Reiniciamos el índice del búfer para la nueva entrada
+            recording = true;
+            printf("Por favor, ingrese el coeficiente %c: ", 'a' + coefficientIndex);
+            bufferIndex = 0;
         }
     }
 }
 ```
-1. La función `processKey` se encarga de manejar las teclas presionadas por el usuario y procesar la entrada de coeficientes.
-2. La variable `recording` se utiliza para rastrear si estamos en modo de grabación, es decir, si el usuario está ingresando un coeficiente.
-3. Si estamos en modo de grabación `(recording == true)`, la función verifica si se ha presionado la tecla *. Si es así, significa que el usuario ha terminado de ingresar el coeficiente actual y se procede a procesar y almacenar ese coeficiente.
-4. Se utiliza `inputBuffer` para almacenar temporalmente la entrada del usuario como una cadena de caracteres. Cuando se presiona *, se agrega un carácter nulo ('\0') al final de la cadena para convertirla en una cadena de caracteres válida.
-5. Se utiliza la función `sscanf` para analizar la cadena `inputBuffer` y extraer un número entero. Si la conversión tiene éxito `(retorna 1)`, el coeficiente se almacena en el arreglo `coefficients` en la posición correspondiente (`coefficientIndex`) y se incrementa `coefficientIndex.`
-6. Si todavía hay coeficientes por ingresar `(coefficientIndex < 3)`, se solicita al usuario que ingrese el siguiente coeficiente y se reinicia `bufferIndex` para comenzar a recopilar la entrada nuevamente.
-7. Si se han ingresado todos los coeficientes `(coefficientIndex == 3)`, se muestra un mensaje con los coeficientes ingresados, se calculan las raíces llamando a `calculateRoots`, se reinicia `coefficientIndex` y se sale del modo de grabación
-8. Si la entrada del usuario no es un número válido `(la conversión con sscanf falla)`, se muestra un mensaje de error y se reinicia `bufferIndex` para que el usuario pueda ingresar nuevamente el coeficiente.
-9. Si no estamos en modo de grabación `(recording == false)` y el usuario presiona *, comenzamos el proceso de grabación iniciando `recording`, mostrando un mensaje para ingresar el primer coeficiente y reiniciando `bufferIndex` para la nueva entrada.
+1. `void processKey(char key) {` : Inicia la definición de la función `processKey` que toma un carácter `key` como argumento.
+2. `if (recording) {` : Verifica si estamos en modo de grabación. Si `recording` es true, significa que el usuario está ingresando un coeficiente.
+3. `if (key == '*') {` : Comprobación si el usuario ha presionado el asterisco *, lo que indica que ha terminado de ingresar el coeficiente actual.
+4. `inputBuffer[bufferIndex] = '\0';` : Establece el carácter nulo ('\0') al final del búfer `inputBuffer` para formar una cadena de caracteres válida.
+5. `printf("Coeficiente %c: %s\n", 'a' + coefficientIndex, inputBuffer);`: Muestra en pantalla el coeficiente ingresado hasta el momento y su etiqueta ('a', 'b' o 'c').
+6. `int coefficientValue;`: Declara una variable `coefficientValue` para almacenar el valor del coeficiente.
+7. `if (inputBuffer[0] == '#') {`: Comprueba si el primer carácter en `inputBuffer` es #, lo que indica que el usuario está ingresando un número negativo.
+8. `if (sscanf(inputBuffer + 1, "%d", &coefficientValue) == 1) {`: Utiliza `sscanf` para analizar la parte de la cadena de caracteres después del '#' y extraer un número entero. Si la conversión tiene éxito (retorna 1), se asigna a `coefficientValue`.
+9. `coefficientValue = -coefficientValue;`: Si el usuario ingresó '#' al principio, se interpreta como un número negativo y se cambia el signo de `coefficientValue` a negativo.
+10. `} else {`: Si no se ingresó '#' al principio, se realiza el análisis normal de la cadena de caracteres.
+11. `if (sscanf(inputBuffer, "%d", &coefficientValue) != 1) {`: Utiliza sscanf para analizar toda la cadena de caracteres y extraer un número entero. Si la conversión no tiene éxito, muestra un mensaje de "Entrada inválida" y reinicia el búfer y el proceso de entrada.
+12. `coefficients[coefficientIndex] = coefficientValue;`: Almacena el valor del coeficiente en el arreglo `coefficients` en la posición correspondiente.
+13. `coefficientIndex++;`: Incrementa el índice del coeficiente para pasar al siguiente coeficiente.
+14. `if (coefficientIndex < 3) {`: Verifica si todavía hay más coeficientes por ingresar. Si es así, solicita al usuario que ingrese el próximo coeficiente y reinicia el búfer para la nueva entrada.
+15. `} else {`: Si se han ingresado todos los coeficientes, muestra un mensaje con los coeficientes ingresados, calcula las raíces llamando a calculateRoots, reinicia el índice del coeficiente y sale del modo de grabación.
+16. `} else {`: Si el usuario no ha presionado '*', significa que está ingresando dígitos del coeficiente actual.
+17. `inputBuffer[bufferIndex++] = key;`: Almacena el dígito ingresado en el búfer y aumenta el índice del búfer.
+18. `}`: Cierra el bloque if que maneja el caso en que se presiona '*' para finalizar el coeficiente actual.
+19. `} else {`: Si no estamos en modo de grabación, significa que el usuario ha presionado '*' para iniciar un nuevo coeficiente.
+20. `if (key == '*') {`: Comprueba si el usuario ha presionado '*', lo que indica el inicio de la grabación de un nuevo coeficiente.
+21. `recording = true;`: Cambia recording a true para entrar en modo de grabación.
+22. `printf("Por favor, ingrese el coeficiente %c: ", 'a' + coefficientIndex);`: Muestra un mensaje solicitando al usuario que ingrese el primer coeficiente ('a', 'b' o 'c').}
+23. `bufferIndex = 0;`: Reinicia el índice del búfer para recopilar la nueva entrada.
+24. `}`: Cierra el bloque `
 
 En sintesis `processKey` maneja la entrada del usuario para que pueda ingresar coeficientes uno por uno, verificar la validez de la entrada y calcular las raíces una vez que todos los coeficientes han sido ingresados correctamente.
 
@@ -457,12 +471,10 @@ if (eleccion == 1) {
     }
 ```
 
-Nota: **Era recomendable usar un switch en lugar de if**
-
-
 # Manual de Usuario
 
 ## Para la funcion de las notas:
+
 1. Cuando el programa se esté ejecutando, deberías ver que el programa está esperando una entrada del usuario.
 2. Presiona la tecla * en el teclado matricial. Esto iniciará la grabación de un número.
 3. Luego de presionar *, puedes ingresar un número de 0 a 10 utilizando las teclas numéricas en el teclado matricial. Por ejemplo, si deseas ingresar el número 7, presiona 7, y así sucesivamente.
@@ -471,15 +483,17 @@ Nota: **Era recomendable usar un switch en lugar de if**
 6. Por ejemplo, si ingresaste el número 7, el programa debería mostrar "Nota alfanumérica: D" en la salida estándar.
 7. Puedes repetir el proceso para ingresar y convertir otros números tantas veces como desees.
    nota: Si ingresas un número fuera del rango válido (0 a 10), el programa indicará que el valor de nota no es válido.
+   
 ## Para la funcion de las raices de un polinomio de grado 2:
+
 1. Cuando inicia el programa, verás el mensaje inicial en la pantalla: "Ingrese los coeficientes del polinomio de grado 2."
 2. Presiona el botón *. La pantalla mostrará: "Por favor, ingrese el coeficiente a:"
-    Ingresa el valor del coeficiente 'a' como un número entero. Por ejemplo, si 'a' es igual a 2, presiona los botones 2 y luego presiona * para confirmar.
+    Ingresa el valor del coeficiente 'a' como un número entero. Por ejemplo, si 'a' es igual a 1, presiona los botones 1 y luego presiona * para confirmar.
 3. Después de ingresar 'a', la pantalla mostrará: "Por favor, ingrese el coeficiente b:"
-    Ingresa el valor del coeficiente 'b' de la misma manera que ingresaste 'a'. Por ejemplo, si 'b' es igual a 3, presiona los botones 3 y luego presiona * para confirmar.
+    Ingresa el valor del coeficiente 'b' de la misma manera que ingresaste 'a'. Por ejemplo, si 'b' es igual a 1, presiona los botones 1 y luego presiona * para confirmar.
 4. Luego de ingresar 'b', la pantalla mostrará: "Por favor, ingrese el coeficiente c:"
-    Ingresa el valor del coeficiente 'c' de la misma manera que ingresaste 'a' y 'b'. Por ejemplo, si 'c' es igual a 1, presiona los botones 1 y luego presiona * para confirmar.
-5. Una vez que ingresaste 'a', 'b' y 'c', el programa mostrará un mensaje en pantalla con los coeficientes que ingresaste. Por ejemplo: "Coeficientes ingresados: a=2, b=3, c=1".
+    Ingresa el valor del coeficiente 'c' de la misma manera que ingresaste 'a' y 'b'. Por ejemplo, si 'c' es igual a -6, presiona los botones # y despues el 6 y luego presiona * para confirmar.
+5. Una vez que ingresaste 'a', 'b' y 'c', el programa mostrará un mensaje en pantalla con los coeficientes que ingresaste. Por ejemplo: "Coeficientes ingresados: a=1, b=1, c=-6".
 6. Luego de mostrar los coeficientes ingresados, el programa calculará automáticamente las raíces del polinomio de grado 2 utilizando la fórmula cuadrática.
 
 ## Para la función de Generar colores en un LED RGB
@@ -494,7 +508,3 @@ Nota: **Era recomendable usar un switch en lugar de if**
 8. Se Se preseiona la tecla "*" para confirmar.
 9. Listo! ya podrás ver el color en la tarjeta
 
-## Observaciones
-
-1. En el programa de la notas es mejor utilizar un `switch` para cada caso de la notas en vez de tener muchos `else if`, que al momento se verlos en codigo son menos amigables y en un `switch` se ve mejor la informacion de los casos a tratar
-2. Para la funcionalidad de la raices de un polinomio mirar el siguiente repositorio de Diego Collazos alli tambien se encuentra el readMe: https://github.com/DiegoColBdz/Raices-Parcial2023.git
