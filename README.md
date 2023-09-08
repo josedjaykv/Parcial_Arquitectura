@@ -428,6 +428,7 @@ En la función `llamarCalculateRoots`, el programa muestra el mensaje "Ingrese l
 
 ## Main
 
+```c++
 int main() {
     printf("Por favor, elija una opcion y presione * para confirmar:\n");
     printf("1. Calcular raices de un polinomio de grado 2\n");
@@ -458,6 +459,7 @@ int main() {
     
     return 0;
 }
+```
 
 ```c++
 printf("Por favor, elija una opción y presione * para confirmar:\n");
