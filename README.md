@@ -171,6 +171,64 @@ En la función `mostrarNotas()`, se ejecuta un bucle infinito. En este bucle, se
 
 Para generas estos colores usamos la función `void showColors()`
 
+**Este es el método que se llama en el main para la Función de Generar colores en un LED RGB.**
+
+
+```c++
+void showColors() {
+    char inputBuffer[32];
+    int bufferIndex = 0;
+    unsigned int numerosDecimales[3];
+    int numeroActual = 0;
+
+    while (numeroActual < 3) {
+        for (int i = 0; i < numRows; i++) {
+            rowPins[i] = 0;
+
+            for (int j = 0; j < numCols; j++) {
+                if (!colPins[j]) {
+                    char keyPressed = keyMap[i][j];
+
+                    if (keyPressed == '*') {
+                        inputBuffer[bufferIndex] = '\0';
+
+                        sscanf(inputBuffer, "%u", &numerosDecimales[numeroActual]);
+                        printf("Numero %d ingresado: %u\n", numeroActual + 1, numerosDecimales[numeroActual]);
+
+                        memset(inputBuffer, 0, sizeof(inputBuffer));
+                        bufferIndex = 0;
+
+                        numeroActual++;
+
+                        if (numeroActual >= 3) {
+                            break;
+                        }
+                    } else {
+                        inputBuffer[bufferIndex] = keyPressed;
+                        bufferIndex++;
+                    }
+
+                    ThisThread::sleep_for(500ms);
+                }
+            }
+
+            if (numeroActual >= 3) {
+                break;
+            }
+
+            rowPins[i] = 1;
+        }
+    }
+
+    float red = 1 - (float)(numerosDecimales[0] / 255.0f);
+    float green = 1 - (float)(numerosDecimales[1] / 255.0f);
+    float blue = 1 - (float)(numerosDecimales[2] / 255.0f);
+
+    setRGBColor(red, green, blue);
+}
+
+```
+
 Esta función está diseñada para permitir al usuario seleccionar colores ingresando valores numéricos desde un teclado de membrana y luego mostrar el color correspondiente utilizando LEDs RGB.
 
 `char inputBuffer[32];` Declaramos un arreglo de caracteres llamado `inputBuffer` con capacidad para almacenar hasta 32 caracteres. Este buffer se utiliza para almacenar temporalmente las teclas presionadas por el usuario en el teclado de membrana.
