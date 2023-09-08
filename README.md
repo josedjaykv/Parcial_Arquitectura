@@ -428,6 +428,37 @@ En la función `llamarCalculateRoots`, el programa muestra el mensaje "Ingrese l
 
 ## Main
 
+int main() {
+    printf("Por favor, elija una opcion y presione * para confirmar:\n");
+    printf("1. Calcular raices de un polinomio de grado 2\n");
+    printf("2. Mostrar colores\n");
+    printf("3. Mostrar notas\n");
+
+
+    printf("Elija una opcion: ");
+
+    int eleccion = darEleccion();
+
+    switch (eleccion) {
+    case 1:
+        llamarCalculateRoots();
+        break;
+    case 2:
+        showColors();
+        break;
+    case 3:
+        mostrarNotas();
+        break;
+    default:
+        printf("Programa terminado.\n");
+        break;
+    }
+    
+    printf("Programa terminado.\n");
+    
+    return 0;
+}
+
 ```c++
 printf("Por favor, elija una opción y presione * para confirmar:\n");
 printf("1. Calcular raíces de un polinomio de grado 2\n");
