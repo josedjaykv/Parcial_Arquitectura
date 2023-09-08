@@ -383,7 +383,8 @@ printf("Elija una opción: ");
 Primero le preguntamos al usaurio que opción desea ejecutar y guardamos en la variable eleccción el número que representa la elecciónd el usuario, esté valor lo da la función `darEleccion();`.
 
 ```c++
- int eleccion = -1;
+int darEleccion(){
+    int eleccion = -1;
 
     // Leer la elección del usuario desde el teclado de membrana
     while (eleccion < 0 || eleccion > 3) {
@@ -409,8 +410,10 @@ Primero le preguntamos al usaurio que opción desea ejecutar y guardamos en la v
             }
 
             rowPins[i] = 1;
-        }
+        }        
     }
+    return eleccion;
+}
 ```
 
 `int eleccion = -1;` Inicializa la variable `eleccion` a -1. Esta variable se utilizará para almacenar la elección del usuario.
@@ -447,29 +450,22 @@ Primero le preguntamos al usaurio que opción desea ejecutar y guardamos en la v
 
 En resumen, este código permite al usuario seleccionar un número entre 0 y 3 en un teclado de membrana. Tan pronto como se ingresa una elección válida o se presiona la tecla '*', el bucle se detiene y la elección se almacena en la variable eleccion.
 
-Luego se ejecutan la opción seleccionada:
+Luego se ejecutan la opción seleccionada utilizando una sentencia switch:
 
 ```c++
-if (eleccion == 1) {
-        calculateRoots();
-    } else if (eleccion == 2) {
+switch (eleccion) {
+    case 1:
+        llamarCalculateRoots();
+        break;
+    case 2:
         showColors();
-    } else if (eleecion == 3) {
-        printf("Ingrese los coeficientes del polinomio de grado 2.\n");
-        while (true) {
-            for (int i = 0; i < numRows; i++) {
-                rowPins[i] = 0;
-
-                for (int j = 0; j < numCols; j++) {
-                    if (!colPins[j]) {
-                        processKey(keyMap[i][j]);
-                        ThisThread::sleep_for(500ms);  // Evita lecturas múltiples mientras la tecla está presionada
-                    }
-                }
-
-                rowPins[i] = 1;
-            }
-        }
+        break;
+    case 3:
+        mostrarNotas();
+        break;
+    default:
+        printf("Programa terminado.\n");
+        break;
     }
 ```
 
